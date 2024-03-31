@@ -41,11 +41,11 @@ app.get('/api/:timestamp', (req, res) => {
   }
   if (new Date(timestamp).toUTCString() !== "Invalid Date") {
     return res.json({
-      unix: new DataTransfer(timestamp).getTime(),
-      utc: timestamp,
+      unix: new Date(timestamp).getTime(),
+      utc: new Date(timestamp).toUTCString(),
     });
   }
-  res.send(timestamp);
+  res.json({error: 'Invalid Date'});
 })
 
 // Listen on port set in environment variable or default to 3000
