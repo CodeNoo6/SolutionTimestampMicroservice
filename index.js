@@ -18,17 +18,20 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-const isInvalidDate = (date) => date.toUTCString() === "Invalid Date"
+// Function to check if a date is valid
+const isValidDate = (dateString) => !isNaN(Date.parse(dateString));
 
-// your first API endpoint... 
+// API endpoint for parsing date strings
 app.get("/api/:date", function (req, res) {
-  let date = new Date(req.params.date)
-  if (isInvalidDate(date)) {
-    date = new Date(+req.params.date)
+  let dateString = req.params.date;
+  let date = new Date(dateString);
+  
+  if (!isValidDate(dateString)) {
+    date = new Date(parseInt(dateString));
   }
 
-  if(isInvalidDate(date)) {
-    res.json({error: "Invalid Date"})
+  if (!isValidDate(dateString) || isNaN(date)) {
+    res.json({error: "Invalid Date"});
     return;
   }
 
@@ -38,13 +41,14 @@ app.get("/api/:date", function (req, res) {
   });
 });
 
+// API endpoint for empty date parameter
 app.get("/api", (req, res) => {
-  let date = new Date();
+  const now = new Date();
   res.json({
-    unix: date.getTime(),
-    utc: date.toUTCString()
-  })
-})
+    unix: now.getTime(),
+    utc: now.toUTCString()
+  });
+});
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
