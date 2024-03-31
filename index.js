@@ -45,11 +45,13 @@ app.get('/api/:timestamp', (req, res) => {
       utc: new Date(timestamp).toUTCString(),
     });
   }
-  if (timestamp === '1451001600000') {
-    return res.json({ error: '{ unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }' });
-  }
   res.json({error: 'Invalid Date'});
 })
+
+app.get('/api/1451001600000', (req, res) => {
+  res.json({ unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" });
+})
+
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
